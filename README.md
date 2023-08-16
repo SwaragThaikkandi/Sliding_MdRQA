@@ -230,3 +230,85 @@ plt.show()
   
 </div>
 We considered some value near window size  = 70 to be good enough, and took 68 as the window size. Note that, due to monotonously decreasing nature of the graph, it is impossible to get an optimal value, which is not subjective. 
+Now that we decided about the window size, we can estimate RQA variables from the sliding windows having the given size.
+
+
+```python
+Dict_RPs=windowed_RP(68, 'RP')                                                      # Specifying window size and folder in which RPs are saved
+First_middle_last_sliding_windows_all_vars(Dict_RPs,'Kuramoto_data.csv')            # Saving RQA variables to a csv file
+```
+
+The resulting dataframe that is getting saved will have a column, "group", which will have the file name(excluding ".npy"). In this code, we are coding information regarding synchrony using the file name, as given below:
+
+
+```python
+data = pd.read_csv('Kuramoto_data.csv')
+FILE = np.array(data['group'])                                                      # In the output data, the field named 'group' will have file name which contains details
+SNR =[]
+NUM =[]
+Kc =[]
+K =[]
+SIZE =[]
+for FI in FILE:
+  info = ast.literal_eval(FI)
+  SNR.append(info[0])
+  NUM.append(info[1])
+  Kc.append(info[2])
+  K.append(info[3])
+  SIZE.append(info[4])
+  
+data['snr'] = SNR
+data['N'] = NUM
+data['Kc'] = Kc
+data['K'] = K
+data['length'] = SIZE
+K = np.array(K)
+Kc = np.array(Kc)
+SYNCH = 1*(K>Kc)                                                                   # Defining synchrony condition, coupling strength grater than that of the critical coupling strength
+data['synch'] = SYNCH
+```
+
+Now, we need to select an SNR value, scale the variables and run the classifier
+```python
+################################################################## Select the value of SNR ################################################################################################
+data_ = data[data['snr']==1.0].reset_index(drop = True)
+################################################################## Scale the data #########################################################################################################\
+features=['recc_rate',
+ 'percent_det',
+ 'avg_diag',
+ 'max_diag',
+ 'percent_lam',
+ 'avg_vert',
+ 'vert_ent',
+ 'diag_ent',
+ 'vert_max']
+for feature in features:
+  arr = np.array(data_[feature])
+  data_[feature] = (arr - np.mean(arr))/(np.std(arr) + 10**(-9))
+  
+################################################################# Run the classification ###################################################################################################
+nested_cv(data_, features, 'synch', 'Kuramotot(SNR=1.0)', repeats=100, inner_repeats=10, outer_splits=3, inner_splits=2)
+#################################################################   DONE ! ################################################################################################################
+```
+
+# Troubleshooting: Parameter Search for embedding dimension
+
+If you were suspecious about the oversimplified look of the function "RP_computer", you are correct. This function also implements a parameter search method for finding the embedding dimensions under the hood. Even though some default values are there, they may not be applicable to all datasets. In such cases, we need to see, what can be set. We had to do this while analyzing data from Koul et al(2023), and it is for this, we have some functions in "RP_maker_diagnose.py". We will see how we can use these functions
+
+
+```python
+from RP_maker_diagnose import fnnhitszero_Plot
+from RP_maker_diagnose import findm_Plot
+from RP_maker_diagnose import RP_diagnose
+from RP_maker_diagnose import get_minFNN_distribution_plot
+
+input_path = '/user/swarag/Koul et al/data_npy'                                        # directory to which the signals are saved
+diagnose_dir = '/user/swarag/Koul et al/diagnose'                                            # directory in which pickle files from this function are saved
+RP_diagnose(input_path, diagnose_dir)
+```
+Now, we have saved the picke files to a directory, we can use those pickle files in the next function. Following function estimates the lower and upper bound (2.5th and 975th percentile) of the distribution of minimum false nearest beighbour(FNN) values for different embedding dimensions. It gives a plot and a CSV file. 
+
+
+```python
+get_minFNN_distribution_plot(path, 'Koul_et_al_RP_diagnose')
+```
