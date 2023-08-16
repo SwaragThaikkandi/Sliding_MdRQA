@@ -312,3 +312,13 @@ Now, we have saved the picke files to a directory, we can use those pickle files
 ```python
 get_minFNN_distribution_plot(path, 'Koul_et_al_RP_diagnose')
 ```
+
+<div style="position: relative; width: 100%;">
+  <img src="https://github.com/SwaragThaikkandi/Sliding_MdRQA/blob/main/Koul_et_al_RP_diagnose.png" style="width: 750px;">
+  
+</div>
+<div style="position: relative; width: 100%;">
+  <img src="https://github.com/SwaragThaikkandi/Sliding_MdRQA/blob/main/Koul_et_al_RP_diagnos_csv.png" style="width: 300px;">
+  
+</div>
+We can see that the minimum value of FNN goes down as we increases the embedding diension. But, the value of delta, which is a parameter that determines whether a particular value of embedding dimnesion can be effectively considered as zero or not, should include most of these values. Generally m=1 is less useful, hence, we can consider the upper bound from m=2 onwards. 
