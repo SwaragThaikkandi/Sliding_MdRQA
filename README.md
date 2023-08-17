@@ -575,7 +575,7 @@ for KEY in tqdm(comb_files):
   data = np.array(data)
   data = data.T
   data = data[::6,:]
-  np.save('/user/swarag/Koul_et_al/signals/('+cnd+','+str(trl)+','+str(dyad)+')~.npy',u)  # Save the data to a numpy file
+  np.save('/user/swarag/Koul_et_al/signals/('+cnd+','+str(trl)+','+str(dyad)+')~.npy',data)  # Save the data to a numpy file
   
 ```
 
