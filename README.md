@@ -532,7 +532,9 @@ def process_n_return_distances(path, x_column, y_column, winsize, distance):    
 
 ```
 
+
 Now we will proceed with converting the csv files into numpy files
+
 
 
 ```python
@@ -576,4 +578,6 @@ for KEY in tqdm(comb_files):
   np.save('/user/swarag/Koul_et_al/signals/('+cnd+','+str(trl)+','+str(dyad)+')~.npy',u)  # Save the data to a numpy file
   
 ```
+
+
 Remaining steps are same, except that the vision condition(visual contact vs no visual contact) and proximity(near vs far) will be derived from variable "cnd". 
