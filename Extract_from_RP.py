@@ -162,7 +162,7 @@ def windowed_RP(winsize,RP_dir, save_path):
   size_arr=[]
   Dict={}
   for file in files:
-    a=file.strip().split('-')[0]
+    a=file.strip().split('~')[0]
     
     RP_s=np.load(dir+'/'+file,allow_pickle=True)
     (M,N)=RP_s.shape
