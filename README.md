@@ -1,6 +1,6 @@
 # Implementing Sliding Window MdRQA to get Summary Statistics Estimate of MdRQA measures from the Data
-This is a brief tutorial about how to use the functions provided in the github repository. Here, we are providing codes, using which the RQA measures can be estimated. However, we uses a parameter search for finding the embedding dimension. This is a step by step tutorial
-## import packahges 
+This is a step by step tutorial about how to use the functions provided in the github repository. Here, we are providing codes, using which the RQA measures can be estimated after a parameter search for finding the embedding dimension. 
+## import packages 
 We will begin with importing packages and functions. Note that the python files should be copied to the mail analysis directory
 ```python
 import numpy as np
